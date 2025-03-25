@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Care Reminder</title>
+    <style>
+      body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+      select, button { margin: 10px; padding: 10px; font-size: 16px; }
+  </style>
+  </head>
+  <body>
+    <h1>Plant Care Reminder</h1>
+    
+    <label for="plant">Choose a Plant:</label>
+    <select id="plant">
+        <option value="cactus">Cactus (Water every 2 weeks)</option>
+        <option value="fern">Fern (Water every 3 days)</option>
+        <option value="orchid">Orchid (Water every 7 days)</option>
+    </select>
+
+    <button onclick="setReminder()">Set Reminder</button>
+
+    <script>
+        function setReminder() {
+            if (!("Notification" in window)) {
+                alert("This browser does not support notifications.");
+                return;
+            }
+
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    const plant = document.getElementById("plant").value;
+                    let time;
+
+                    switch (plant) {
+                        case "cactus":
+                            time = 14 * 24 * 60 * 60 * 1000; // 2 weeks
+                            break;
+                        case "fern":
+                            time = 3 * 24 * 60 * 60 * 1000; // 3 days
+                            break;
+                        case "orchid":
+                            time = 7 * 24 * 60 * 60 * 1000; // 7 days
+                            break;
+                        default:
+                            time = 24 * 60 * 60 * 1000; // Default 1 day
+                    }
+
+                    setTimeout(() => {
+                        new Notification("🌱 Plant Care Reminder", {
+                            body: `Time to water your ${plant}!`,
+                        });
+                    }, 5000); // For testing, triggers in 5 seconds. Change to `time` for actual reminders.
+
+                    alert("Reminder set! You will receive a notification.");
+                } else {
+                    alert("Please enable notifications to use this feature.");
+                }
+            });
+        }
+    </script>
+  </body>
+</html>
